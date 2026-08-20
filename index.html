@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rubizh War Map</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+    <!-- Наш CSS -->
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<body>
+
+  <!-- Боковая панель -->
+<div id="sidebar">
+
+    <button
+    id="close-sidebar"
+    type="button"
+    title="Закрыть панель">
+
+    <svg
+        class="sidebar-control-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M6 6l12 12"></path>
+        <path d="M18 6L6 18"></path>
+
+    </svg>
+
+</button>
+
+<div class="sidebar-header">
+
+    <div class="sidebar-brand">
+
+        <h1 class="map-title">
+            RUBIZH / WAR MAP
+        </h1>
+
+        <div class="map-subtitle">
+            OPERATIONAL MAP
+        </div>
+
+    </div>
+
+</div>
+
+<div class="sidebar-divider"></div>
+
+<div class="legend-box">
+    <h2>Легенда</h2>
+
+    <div class="legend-item">
+        <span class="legend-color" style="background: #a52714;"></span>
+        <span>Оккупировано</span>
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-color" style="background: #808080;"></span>
+        <span>Под вопросом</span>
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-color" style="background: #ffff00;"></span>
+        <span>Освобождено</span>
+    </div>
+</div>
+
+<div class="sidebar-divider"></div>
+
+<div class="updates-box">
+    <h2>Лента обновлений</h2>
+
+    <div id="updates-feed">
+
+        <div class="update-item">
+            <div class="update-date">15.08.2026</div>
+            <div class="update-text">
+                Продвижение РФ севернее Токмака.
+            </div>
+        </div>
+
+        <div class="update-item">
+            <div class="update-date">14.08.2026</div>
+            <div class="update-text">
+                Освобождён участок западнее Покровска.
+            </div>
+        </div>
+
+        <div class="update-item">
+            <div class="update-date">13.08.2026</div>
+            <div class="update-text">
+                Бои в районе Часового Яра, линия фронта уточнена.
+            </div>
+                </div>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- Кнопка открытия левой панели -->
+<button
+    id="open-sidebar"
+    type="button"
+    title="Открыть панель">
+
+    <svg
+        class="sidebar-control-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M5 7h14"></path>
+        <path d="M5 12h14"></path>
+        <path d="M5 17h14"></path>
+
+    </svg>
+
+</button>
+
+
+<!-- Правая панель управления -->
+<div id="map-toolbar">
+
+
+    <!-- Переключатель подложки -->
+    <div id="basemap-control">
+
+       <button
+    id="basemap-toggle"
+    type="button"
+    title="Выбрать подложку">
+
+    <svg
+        class="toolbar-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M3 6.5L8 4l8 3 5-2.5v13L16 20l-8-3-5 2.5z"></path>
+        <path d="M8 4v13"></path>
+        <path d="M16 7v13"></path>
+
+    </svg>
+
+</button>
+
+        <div id="basemap-menu" class="hidden">
+
+            <div class="basemap-title">
+                Подложка
+            </div>
+
+            <button
+    class="basemap-option"
+    data-map="normal"
+    type="button">
+    Обычная
+</button>
+
+ <button
+    class="basemap-option active"
+    data-map="satellite"
+    type="button">
+    Гибрид
+</button>
+
+            <button
+                class="basemap-option"
+                data-map="topo"
+                type="button">
+                Топографическая
+            </button>
+
+            <button
+    class="basemap-option"
+    data-map="dark">
+    Тёмная
+</button>
+
+        </div>
+
+    </div>
+
+    <!-- Поиск населённых пунктов -->
+<div id="search-control">
+
+    <button
+    id="search-toggle"
+    type="button"
+    title="Поиск населённых пунктов">
+
+    <svg
+        class="toolbar-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <circle cx="11" cy="11" r="6"></circle>
+        <path d="M16 16l4.5 4.5"></path>
+
+    </svg>
+
+</button>
+
+
+    <div
+        id="search-panel"
+        class="hidden">
+
+        <div class="search-row">
+
+            <input
+                id="place-search-input"
+                type="text"
+                placeholder="Найти населённый пункт..."
+                autocomplete="off">
+
+            <button
+                id="place-search-button"
+                type="button">
+                Найти
+            </button>
+
+        </div>
+
+
+        <div id="place-search-status">
+        </div>
+
+
+        <div
+            id="place-search-results"
+            class="hidden">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Настройки -->
+<div id="settings-control">
+
+    <button
+    id="settings-toggle"
+    type="button"
+    title="Настройки">
+
+    <svg
+        class="toolbar-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 2v3"></path>
+        <path d="M12 19v3"></path>
+        <path d="M4.9 4.9L7 7"></path>
+        <path d="M17 17l2.1 2.1"></path>
+        <path d="M2 12h3"></path>
+        <path d="M19 12h3"></path>
+        <path d="M4.9 19.1L7 17"></path>
+        <path d="M17 7l2.1-2.1"></path>
+
+    </svg>
+
+</button>
+
+
+    <div
+        id="settings-panel"
+        class="hidden">
+
+        <div id="settings-title">
+            Настройки
+        </div>
+
+
+        <div class="settings-section">
+
+            <div
+                id="settings-theme-label"
+                class="settings-label">
+                Тема
+            </div>
+
+            <button
+    id="theme-toggle"
+    type="button">
+
+    <svg
+        class="menu-action-icon theme-icon-moon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path
+            d="M20 15.2A8 8 0 0 1 8.8 4
+               8 8 0 1 0 11.2 20
+               7.9 7.9 0 0 0 20 15.2">
+        </path>
+
+    </svg>
+
+
+    <svg
+        class="menu-action-icon theme-icon-sun is-hidden"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <circle cx="12" cy="12" r="4"></circle>
+
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="M4.93 4.93l1.41 1.41"></path>
+        <path d="M17.66 17.66l1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="M4.93 19.07l1.41-1.41"></path>
+        <path d="M17.66 6.34l1.41-1.41"></path>
+
+    </svg>
+
+
+    <span id="theme-toggle-label">
+        Тёмная тема
+    </span>
+
+</button>
+
+        </div>
+
+
+        <div class="settings-section">
+
+            <div
+                id="settings-language-label"
+                class="settings-label">
+                Язык
+            </div>
+
+
+            <div id="language-options">
+
+                <button
+                    class="language-option"
+                    data-language="uk"
+                    type="button">
+                    UA
+                </button>
+
+                <button
+                    class="language-option active"
+                    data-language="ru"
+                    type="button">
+                    RU
+                </button>
+
+                <button
+                    class="language-option"
+                    data-language="en"
+                    type="button">
+                    EN
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Инструменты -->
+<div id="tools-control">
+
+    <button
+    id="tools-toggle"
+    type="button"
+    title="Инструменты">
+
+    <svg
+        class="toolbar-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M4 6h10"></path>
+        <path d="M18 6h2"></path>
+        <circle cx="16" cy="6" r="2"></circle>
+
+        <path d="M4 12h3"></path>
+        <path d="M11 12h9"></path>
+        <circle cx="9" cy="12" r="2"></circle>
+
+        <path d="M4 18h8"></path>
+        <path d="M16 18h4"></path>
+        <circle cx="14" cy="18" r="2"></circle>
+
+    </svg>
+
+</button>
+
+
+    <div
+        id="tools-panel"
+        class="hidden">
+
+        <div
+    id="tools-title"
+    class="tools-title">
+    Инструменты
+</div>
+
+
+        <!-- Показ территорий -->
+        <div class="tools-section">
+
+            <div class="tools-row">
+
+                <span id="tools-territories-label">
+    Территории
+</span>
+
+                <button
+                    id="territories-toggle"
+                    type="button"
+                    class="enabled">
+                    Вкл
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Границы территорий -->
+<div class="tools-section">
+
+    <div class="tools-row">
+
+        <span id="tools-borders-label">
+            Границы
+        </span>
+
+        <button
+            id="territory-borders-toggle"
+            type="button"
+            class="enabled">
+            Вкл
+        </button>
+
+    </div>
+
+</div>
+
+
+        <!-- Прозрачность -->
+        <div class="tools-section">
+
+            <div class="tools-opacity-header">
+
+                <span id="tools-opacity-label">
+    Прозрачность
+</span>
+
+                <span id="territory-opacity-value">
+                    100%
+                </span>
+
+            </div>
+
+
+            <input
+                id="territory-opacity"
+                type="range"
+                min="0"
+                max="100"
+                step="5"
+                value="100">
+
+        </div>
+
+                <!-- Измерение расстояния -->
+        <div class="tools-section">
+
+            <button
+    id="distance-toggle"
+    type="button">
+
+    <svg
+        class="menu-action-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M4 17L17 4l3 3L7 20z"></path>
+        <path d="M13 8l3 3"></path>
+        <path d="M10 11l2 2"></path>
+        <path d="M7 14l3 3"></path>
+
+    </svg>
+
+    <span id="distance-toggle-label">
+        Измерить расстояние
+    </span>
+
+</button>
+
+            <div
+                id="distance-info"
+                class="hidden">
+
+                <div id="distance-value">
+                    0 м
+                </div>
+
+                <button
+                    id="distance-clear"
+                    type="button">
+                    Очистить
+                </button>
+
+            </div>
+
+            <!-- Координаты курсора -->
+<div class="tools-section">
+
+    <button
+    id="coordinates-toggle"
+    type="button">
+
+    <svg
+        class="menu-action-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
+
+        <path d="M12 2v4"></path>
+        <path d="M12 18v4"></path>
+        <path d="M2 12h4"></path>
+        <path d="M18 12h4"></path>
+
+    </svg>
+
+    <span id="coordinates-toggle-label">
+        Координаты курсора
+    </span>
+
+</button>
+
+    <div
+        id="coordinates-info"
+        class="hidden">
+
+        <div id="coordinates-value">
+            0.00000, 0.00000
+        </div>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+<!-- /Правая панель управления -->
+
+    <!-- История карты -->
+<div id="history-control">
+
+    <button
+    id="history-toggle"
+    type="button"
+    title="История карты">
+
+    <svg
+        class="toolbar-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <rect
+            x="4"
+            y="5"
+            width="16"
+            height="15"
+            rx="2">
+        </rect>
+
+        <path d="M8 3v4"></path>
+        <path d="M16 3v4"></path>
+        <path d="M4 9h16"></path>
+
+        <path d="M8 13h2"></path>
+        <path d="M14 13h2"></path>
+        <path d="M8 17h2"></path>
+        <path d="M14 17h2"></path>
+
+    </svg>
+
+</button>
+
+    <div id="history-panel">
+
+        <div class="history-title">
+            История карты
+        </div>
+<div class="history-navigation">
+
+    <button
+    id="history-prev"
+    type="button"
+    title="Предыдущая дата">
+
+    <svg
+        class="history-arrow-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M15 18l-6-6 6-6"></path>
+
+    </svg>
+
+</button>
+
+    <div class="history-date-wrapper">
+
+        <button id="history-date" type="button">
+            14.08.2026 ▾
+        </button>
+
+        <div id="history-date-list" class="hidden">
+        </div>
+
+    </div>
+
+    <button
+    id="history-next"
+    type="button"
+    title="Следующая дата">
+
+    <svg
+        class="history-arrow-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M9 6l6 6-6 6"></path>
+
+    </svg>
+
+</button>
+
+</div>
+
+<div id="history-status">
+    Актуальная версия
+</div>
+
+
+<button
+    id="history-latest"
+    class="hidden"
+    type="button">
+    Актуальная версия
+</button>
+
+        </div>
+
+    </div>
+
+
+    <a
+    id="telegram-map-button"
+    href="https://t.me/RubizhMapUA"
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Telegram канал">
+
+    <svg
+        class="telegram-map-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path
+            d="M21.2 4.8c.3-.12.62.16.53.47l-3.04 14.35c-.07.34-.45.5-.75.33l-4.76-2.73-2.43 2.34c-.22.21-.59.06-.59-.24v-3.3l8.57-7.76c.18-.16-.03-.44-.25-.31l-10.58 6.55-4.4-1.46c-.35-.12-.37-.61-.03-.76z">
+        </path>
+
+    </svg>
+
+</a>
+
+
+    <!-- Карта -->
+    <div id="map"></div>
+    <a
+    id="map-watermark"
+    href="https://t.me/RubizhMapUA"
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Перейти в Telegram канал">
+
+    RUBIZH
+
+</a>
+
+
+   <!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Наш JS -->
+<script src="script.js?v=3"></script>
+
+</body>
+</html>

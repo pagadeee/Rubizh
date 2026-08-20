@@ -1,0 +1,5226 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    font-family: Arial, sans-serif;
+}
+
+
+/* =========================
+   КАРТА
+   ========================= */
+
+#map {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =========================
+   ЛЕВАЯ ПАНЕЛЬ
+   ========================= */
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    z-index: 1000;
+
+    padding: 14px;
+    box-sizing: border-box;
+
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.25);
+
+    transition: transform 0.3s ease;
+
+display: flex;
+flex-direction: column;
+
+gap: 0;
+
+    overflow: hidden;
+
+    background-image:
+    linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)),
+    url("camo.jpg");
+    background-repeat: repeat;
+    background-size: 260px auto;
+    background-position: top left;
+}
+
+
+#sidebar.hidden {
+    transform:
+        translateX(-100%);
+}
+
+
+#sidebar h1 {
+    margin-top: 0;
+
+    padding-right: 30px;
+
+    font-size: 26px;
+}
+
+
+/* =========================
+   КНОПКА ЗАКРЫТИЯ
+   ========================= */
+
+#close-sidebar {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   КНОПКА ОТКРЫТИЯ ПАНЕЛИ
+   ========================= */
+
+#open-sidebar {
+    display: none;
+
+    position: fixed;
+
+    top: 15px;
+    left: 15px;
+
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.25);
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    z-index: 1300;
+}
+
+
+#open-sidebar.visible {
+    display: block;
+}
+
+
+/* =========================
+   ЛЕГЕНДА
+   ========================= */
+
+.section {
+    margin-top: 30px;
+}
+
+
+.section h2 {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+}
+
+
+.legend-item {
+    display: flex;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+
+.legend-color {
+    display: inline-block;
+
+    width: 24px;
+    height: 24px;
+
+    margin-right: 10px;
+
+    border:
+        1px solid #555;
+}
+
+
+/* =========================
+   КНОПКА ПОДЛОЖКИ
+   ========================= */
+
+#basemap-control {
+    position: fixed;
+
+    top: 15px;
+    right: 15px;
+
+    z-index: 1400;
+}
+
+
+#basemap-toggle {
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.25);
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   МЕНЮ ПОДЛОЖЕК
+   ========================= */
+
+#basemap-menu {
+    position: absolute;
+
+    top: 55px;
+    right: 0;
+
+    width: 200px;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+#basemap-menu.hidden {
+    display: none;
+}
+
+
+.basemap-title {
+    margin-bottom: 8px;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+
+.basemap-option {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 6px;
+    padding: 9px 10px;
+
+    border:
+        1px solid #d0d0d0;
+
+    border-radius: 6px;
+
+    background: white;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.basemap-option:hover {
+    background: #f2f2f2;
+}
+
+
+.basemap-option.active {
+    font-weight: bold;
+
+    background: #e8e8e8;
+}
+
+/* =========================
+   ИСТОРИЯ КАРТЫ
+   ========================= */
+
+#history-control {
+    position: fixed;
+    right: 15px;
+    bottom: 25px;
+
+    z-index: 1400;
+}
+
+
+/* Маленькая кнопка календаря */
+
+#history-toggle {
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.25);
+
+    font-size: 21px;
+
+    cursor: pointer;
+}
+
+
+/* Само окно истории */
+
+#history-panel {
+    position: absolute;
+
+    right: 0;
+    bottom: 55px;
+
+    width: 240px;
+
+    padding: 14px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+#history-panel.hidden {
+    display: none;
+}
+
+
+.history-title {
+    margin-bottom: 12px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    text-align: center;
+}
+
+
+.history-navigation {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+#history-date {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+#history-prev,
+#history-next {
+    width: 38px;
+    height: 34px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    background: white;
+
+    cursor: pointer;
+
+    font-size: 17px;
+}
+
+
+#history-prev:hover,
+#history-next:hover {
+    background: #f2f2f2;
+}
+
+
+#history-prev:disabled,
+#history-next:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+
+/* =========================
+   ВЫБОР ДАТЫ ИСТОРИИ
+   ========================= */
+
+.history-date-wrapper {
+    position: relative;
+}
+
+
+#history-date {
+    min-width: 120px;
+
+    padding: 7px 10px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+#history-date:hover {
+    background: #f2f2f2;
+}
+
+
+#history-date-list {
+    position: absolute;
+
+    right: 50%;
+    bottom: 42px;
+
+    transform: translateX(50%);
+
+    width: 150px;
+    max-height: 260px;
+
+    overflow-y: auto;
+
+    padding: 6px;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.3);
+
+    z-index: 1600;
+}
+
+
+#history-date-list.hidden {
+    display: none;
+}
+
+
+.history-date-option {
+    display: block;
+
+    width: 100%;
+
+    padding: 8px;
+
+    border: none;
+    border-radius: 5px;
+
+    background: white;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+
+.history-date-option:hover {
+    background: #eeeeee;
+}
+
+
+.history-date-option.active {
+    background: #e2e2e2;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   СТАТУС ИСТОРИИ
+   ========================= */
+
+#history-status {
+    margin-top: 10px;
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: #eeeeee;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    text-align: center;
+}
+
+
+/* Немного улучшаем дату */
+
+#history-date {
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#history-date:hover {
+    background: #eeeeee;
+}
+
+
+#history-date:active {
+    transform: scale(0.97);
+}
+
+
+/* Улучшаем стрелки */
+
+#history-prev,
+#history-next {
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#history-prev:not(:disabled):active,
+#history-next:not(:disabled):active {
+    transform: scale(0.92);
+}
+
+
+/* =========================
+   КНОПКА АКТУАЛЬНОЙ ВЕРСИИ
+   ========================= */
+
+#history-latest {
+    width: 100%;
+
+    margin-top: 10px;
+    padding: 8px 10px;
+
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#history-latest:hover {
+    background: #f2f2f2;
+}
+
+
+#history-latest:active {
+    transform: scale(0.97);
+}
+
+
+#history-latest.hidden {
+    display: none;
+}
+
+
+/* =========================
+   ПОИСК НАСЕЛЁННЫХ ПУНКТОВ
+   ========================= */
+
+#search-control {
+    position: fixed;
+
+    top: 75px;
+    right: 15px;
+
+    z-index: 1400;
+}
+
+
+/* Кнопка поиска */
+
+#search-toggle {
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.25);
+
+    font-size: 21px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#search-toggle:hover {
+    background: #f2f2f2;
+}
+
+
+#search-toggle:active {
+    transform: scale(0.94);
+}
+
+
+/* Панель поиска */
+
+#search-panel {
+    position: absolute;
+
+    top: 0;
+    right: 55px;
+
+    width: 330px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+#search-panel.hidden {
+    display: none;
+}
+
+
+/* Строка ввода */
+
+.search-row {
+    display: flex;
+
+    gap: 7px;
+}
+
+
+#place-search-input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 9px 10px;
+
+    border:
+        1px solid #cccccc;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+
+#place-search-input:focus {
+    border-color: #777777;
+}
+
+
+/* Кнопка "Найти" */
+
+#place-search-button {
+    padding: 8px 12px;
+
+    border:
+        1px solid #cccccc;
+
+    border-radius: 6px;
+
+    background: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+#place-search-button:hover {
+    background: #f2f2f2;
+}
+
+
+/* Статус поиска */
+
+#place-search-status {
+    display: none;
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    color: #666666;
+}
+
+
+#place-search-status.visible {
+    display: block;
+}
+
+
+/* Результаты */
+
+#place-search-results {
+    margin-top: 8px;
+
+    max-height: 260px;
+
+    overflow-y: auto;
+
+    border-top:
+        1px solid #eeeeee;
+
+    padding-top: 5px;
+}
+
+
+#place-search-results.hidden {
+    display: none;
+}
+
+
+.place-search-result {
+    display: block;
+
+    width: 100%;
+
+    padding: 9px 8px;
+
+    border: none;
+    border-radius: 5px;
+
+    background: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+
+.place-search-result:hover {
+    background: #eeeeee;
+}
+
+
+.place-search-result-name {
+    display: block;
+
+    font-weight: bold;
+}
+
+
+.place-search-result-full {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 11px;
+
+    color: #777777;
+}
+
+
+/* =========================
+   НОВЫЙ ВИД БОКОВОЙ ПАНЕЛИ
+   ========================= */
+
+
+/* =========================
+   ЗАГОЛОВОК КАРТЫ
+   ========================= */
+
+.sidebar-header {
+    flex-shrink: 0;
+
+    padding:
+        3px
+        31px
+        3px
+        4px;
+}
+
+
+.map-title {
+    margin: 0;
+
+    text-align: center;
+
+    font-family:
+        "UnifrakturCook",
+        "Old English Text MT",
+        serif;
+
+    font-size: 29px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    color: #11120d;
+
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.45),
+        0 2px 3px rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================
+   РАЗДЕЛИТЕЛИ
+   ========================= */
+
+.sidebar-divider {
+    flex-shrink: 0;
+
+    height: 1px;
+
+    margin:
+        10px
+        2px
+        11px;
+
+    background:
+        rgba(25, 27, 18, 0.78);
+
+    box-shadow:
+        0 1px 0
+        rgba(255, 255, 255, 0.25);
+}
+
+
+/* =========================
+   ОБЩИЙ СТИЛЬ БЛОКОВ
+   ========================= */
+
+.legend-box,
+.updates-box {
+    box-sizing: border-box;
+
+    background:
+        rgba(244, 242, 226, 0.93);
+
+    border:
+        1px solid
+        rgba(42, 44, 31, 0.9);
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 3px 8px
+        rgba(0, 0, 0, 0.24),
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.55);
+}
+
+
+/* =========================
+   ЛЕГЕНДА
+   ========================= */
+
+.legend-box {
+    flex-shrink: 0;
+
+    padding:
+        10px
+        11px
+        7px;
+
+    margin: 0;
+}
+
+
+.legend-box h2 {
+    margin:
+        0
+        0
+        10px;
+
+    padding-bottom: 6px;
+
+    border-bottom:
+        1px solid
+        rgba(55, 56, 40, 0.25);
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: #22231b;
+}
+
+
+.legend-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #1c1d17;
+}
+
+
+.legend-color {
+    flex-shrink: 0;
+
+    width: 20px;
+    height: 20px;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(30, 30, 25, 0.75);
+
+    border-radius: 2px;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255, 255, 255, 0.15);
+}
+
+
+/* =========================
+   ЛЕНТА ОБНОВЛЕНИЙ
+   ========================= */
+
+.updates-box {
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+        10px
+        8px
+        8px;
+
+    margin-bottom: 0;
+}
+
+
+.updates-box h2 {
+    flex-shrink: 0;
+
+    margin:
+        0
+        3px
+        8px;
+
+    padding-bottom: 7px;
+
+    border-bottom:
+        1px solid
+        rgba(55, 56, 40, 0.25);
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: #22231b;
+}
+
+
+/* Сам прокручиваемый список */
+
+#updates-feed {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding:
+        1px
+        3px
+        2px
+        2px;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #77765e
+        transparent;
+}
+
+
+/* Скролл Chrome / Edge */
+
+#updates-feed::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+#updates-feed::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+#updates-feed::-webkit-scrollbar-thumb {
+    background:
+        rgba(92, 91, 67, 0.72);
+
+    border-radius: 20px;
+}
+
+
+/* =========================
+   КАРТОЧКА ОБНОВЛЕНИЯ
+   ========================= */
+
+.update-item {
+    position: relative;
+
+    margin-bottom: 9px;
+
+    padding:
+        10px
+        10px
+        10px
+        13px;
+
+    background:
+        rgba(205, 204, 183, 0.92);
+
+    border:
+        1px solid
+        rgba(74, 74, 56, 0.35);
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 5px
+        rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+
+/* Маленькая военная полоска слева */
+
+.update-item::before {
+    content: "";
+
+    position: absolute;
+
+    top: 8px;
+    bottom: 8px;
+    left: 5px;
+
+    width: 3px;
+
+    border-radius: 4px;
+
+    background:
+        #65654a;
+}
+
+
+.update-item:hover {
+    transform:
+        translateX(2px);
+
+    background:
+        rgba(218, 217, 197, 0.97);
+}
+
+
+/* Дата */
+
+.update-date {
+    margin-bottom: 4px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    color: #555545;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* Текст новости */
+
+.update-text {
+    font-size: 13px;
+
+    line-height: 1.35;
+
+    color: #171813;
+}
+
+
+/* =========================
+   КНОПКА ЗАКРЫТИЯ
+   ========================= */
+
+#close-sidebar {
+    position: absolute;
+
+    top: 7px;
+    right: 8px;
+
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(34, 35, 26, 0.45);
+
+    border-radius: 6px;
+
+    background:
+        rgba(235, 233, 213, 0.67);
+
+    color: #11120d;
+
+    font-size: 26px;
+
+    line-height: 26px;
+
+    cursor: pointer;
+
+    z-index: 10;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#close-sidebar:hover {
+    background:
+        rgba(245, 243, 225, 0.95);
+}
+
+
+#close-sidebar:active {
+    transform:
+        scale(0.90);
+}
+
+
+/* =========================
+   ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ
+   ========================= */
+
+/* =========================
+   НАСТРОЙКИ
+   ========================= */
+
+#settings-control {
+    position: fixed;
+
+    top: 135px;
+    right: 15px;
+
+    z-index: 1400;
+}
+
+
+/* Главная кнопка */
+
+#settings-toggle {
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.25);
+
+    font-size: 21px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#settings-toggle:hover {
+    background: #f2f2f2;
+}
+
+
+#settings-toggle:active {
+    transform: scale(0.94);
+}
+
+
+/* Панель */
+
+#settings-panel {
+    position: absolute;
+
+    top: 0;
+    right: 55px;
+
+    width: 220px;
+
+    padding: 13px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+#settings-panel.hidden {
+    display: none;
+}
+
+
+#settings-title {
+    margin-bottom: 12px;
+
+    padding-bottom: 8px;
+
+    border-bottom:
+        1px solid #dddddd;
+
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.settings-section {
+    margin-top: 12px;
+}
+
+
+.settings-label {
+    margin-bottom: 7px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    color: #666666;
+}
+
+
+/* Кнопка темы внутри панели */
+
+#theme-toggle {
+    width: 100%;
+
+    padding: 8px 10px;
+
+    border:
+        1px solid #cccccc;
+
+    border-radius: 6px;
+
+    background: white;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease;
+}
+
+
+#theme-toggle:hover {
+    background: #eeeeee;
+}
+
+
+/* Языки */
+
+#language-options {
+    display: flex;
+
+    gap: 6px;
+}
+
+
+.language-option {
+    flex: 1;
+
+    padding: 7px 4px;
+
+    border:
+        1px solid #cccccc;
+
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.language-option:hover {
+    background: #eeeeee;
+}
+
+
+.language-option:active {
+    transform: scale(0.94);
+}
+
+
+.language-option.active {
+    background: #333333;
+    color: white;
+
+    border-color: #333333;
+}
+
+
+
+/* =========================
+   ТЁМНАЯ ТЕМА
+   ========================= */
+
+
+/* Плавающие кнопки */
+
+body.dark-theme #basemap-toggle,
+body.dark-theme #search-toggle,
+body.dark-theme #settings-toggle,
+body.dark-theme #history-toggle,
+body.dark-theme #open-sidebar {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme #basemap-toggle:hover,
+body.dark-theme #search-toggle:hover,
+body.dark-theme #theme-toggle:hover,
+body.dark-theme #history-toggle:hover,
+body.dark-theme #open-sidebar:hover {
+    background: #303134;
+}
+
+
+
+/* =========================
+   МЕНЮ ПОДЛОЖЕК
+   ========================= */
+
+body.dark-theme #basemap-menu {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme .basemap-option {
+    background: #202124;
+    color: #eeeeee;
+
+    border-color: #555555;
+}
+
+
+body.dark-theme .basemap-option:hover {
+    background: #303134;
+}
+
+
+body.dark-theme .basemap-option.active {
+    background: #3c4043;
+}
+
+
+
+/* =========================
+   ПОИСК
+   ========================= */
+
+body.dark-theme #search-panel {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme #place-search-input {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #place-search-input::placeholder {
+    color: #aaaaaa;
+}
+
+
+body.dark-theme #place-search-input:focus {
+    border-color: #aaaaaa;
+}
+
+
+body.dark-theme #place-search-button {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #place-search-button:hover {
+    background: #3c4043;
+}
+
+
+body.dark-theme #place-search-status {
+    color: #bbbbbb;
+}
+
+
+body.dark-theme #place-search-results {
+    border-top-color: #444444;
+}
+
+
+body.dark-theme .place-search-result {
+    background: #202124;
+    color: #eeeeee;
+}
+
+
+body.dark-theme .place-search-result:hover {
+    background: #303134;
+}
+
+
+body.dark-theme .place-search-result-full {
+    color: #aaaaaa;
+}
+
+
+
+/* =========================
+   ИСТОРИЯ
+   ========================= */
+
+body.dark-theme #history-panel {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme #history-prev,
+body.dark-theme #history-next,
+body.dark-theme #history-date,
+body.dark-theme #history-latest {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #history-prev:hover,
+body.dark-theme #history-next:hover,
+body.dark-theme #history-date:hover,
+body.dark-theme #history-latest:hover {
+    background: #3c4043;
+}
+
+
+body.dark-theme #history-status {
+    background: #303134;
+    color: #eeeeee;
+}
+
+
+body.dark-theme #history-date-list {
+    background: #202124;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.6);
+}
+
+
+body.dark-theme .history-date-option {
+    background: #202124;
+    color: #eeeeee;
+}
+
+
+body.dark-theme .history-date-option:hover {
+    background: #303134;
+}
+
+
+body.dark-theme .history-date-option.active {
+    background: #3c4043;
+}
+
+
+
+/* =========================
+   БОКОВАЯ ПАНЕЛЬ
+   ========================= */
+
+body.dark-theme #sidebar {
+    background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.35),
+            rgba(0, 0, 0, 0.35)
+        ),
+        url("camo.jpg");
+
+    box-shadow:
+        3px 0 15px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme .map-title {
+    color: #f0f0e8;
+
+    text-shadow:
+        0 2px 3px
+        rgba(0, 0, 0, 0.8);
+}
+
+
+body.dark-theme .sidebar-divider {
+    background:
+        rgba(240, 240, 225, 0.7);
+
+    box-shadow: none;
+}
+
+
+body.dark-theme .legend-box,
+body.dark-theme .updates-box {
+    background:
+        rgba(30, 31, 27, 0.94);
+
+    border-color:
+        rgba(205, 205, 185, 0.55);
+
+    color: #eeeeee;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.45);
+}
+
+
+body.dark-theme .legend-box h2,
+body.dark-theme .updates-box h2 {
+    color: #eeeeee;
+
+    border-bottom-color:
+        rgba(255, 255, 255, 0.15);
+}
+
+
+body.dark-theme .legend-item {
+    color: #eeeeee;
+}
+
+
+body.dark-theme .update-item {
+    background:
+        rgba(59, 60, 52, 0.95);
+
+    border-color:
+        rgba(190, 190, 170, 0.22);
+}
+
+
+body.dark-theme .update-item:hover {
+    background:
+        rgba(70, 71, 62, 0.98);
+}
+
+
+body.dark-theme .update-item::before {
+    background: #999a78;
+}
+
+
+body.dark-theme .update-date {
+    color: #bdbdac;
+}
+
+
+body.dark-theme .update-text {
+    color: #eeeeee;
+}
+
+
+body.dark-theme #close-sidebar {
+    background:
+        rgba(25, 26, 22, 0.75);
+
+    color: #eeeeee;
+
+    border-color:
+        rgba(230, 230, 215, 0.35);
+}
+
+
+body.dark-theme #close-sidebar:hover {
+    background:
+        rgba(45, 46, 40, 0.95);
+}
+
+
+
+/* =========================
+   LEAFLET POPUP
+   ========================= */
+
+body.dark-theme .leaflet-popup-content-wrapper,
+body.dark-theme .leaflet-popup-tip {
+    background: #202124;
+    color: #eeeeee;
+}
+
+
+/* =========================
+   НАСТРОЙКИ — ТЁМНАЯ ТЕМА
+   ========================= */
+
+body.dark-theme #settings-toggle {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme #settings-toggle:hover {
+    background: #303134;
+}
+
+
+body.dark-theme #settings-panel {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.6);
+}
+
+
+body.dark-theme #settings-title {
+    border-bottom-color: #444444;
+}
+
+
+body.dark-theme .settings-label {
+    color: #bbbbbb;
+}
+
+
+body.dark-theme #theme-toggle,
+body.dark-theme .language-option {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #theme-toggle:hover,
+body.dark-theme .language-option:hover {
+    background: #3c4043;
+}
+
+
+body.dark-theme .language-option.active {
+    background: #eeeeee;
+    color: #202124;
+
+    border-color: #eeeeee;
+}
+
+
+/* =========================
+   ИНСТРУМЕНТЫ
+   ========================= */
+
+#tools-control {
+    position: fixed;
+
+    top: 195px;
+    right: 15px;
+
+    z-index: 1400;
+}
+
+
+/* Главная кнопка */
+
+#tools-toggle {
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: white;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.25);
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#tools-toggle:hover {
+    background: #f2f2f2;
+}
+
+
+#tools-toggle:active {
+    transform: scale(0.94);
+}
+
+
+/* Окно инструментов */
+
+#tools-panel {
+    position: absolute;
+
+    top: 0;
+    right: 55px;
+
+    width: 240px;
+
+    padding: 13px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+#tools-panel.hidden {
+    display: none;
+}
+
+
+.tools-title {
+    margin-bottom: 12px;
+
+    padding-bottom: 8px;
+
+    border-bottom:
+        1px solid #dddddd;
+
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.tools-section {
+    margin-top: 12px;
+}
+
+
+.tools-row {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+/* Вкл / Выкл */
+
+#territories-toggle,
+#territory-borders-toggle {
+    min-width: 55px;
+
+    padding: 6px 9px;
+
+    border:
+        1px solid #cccccc;
+
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+#territories-toggle.enabled,
+#territory-borders-toggle.enabled {
+    background: #333333;
+    color: white;
+
+    border-color: #333333;
+}
+
+
+/* Заголовок прозрачности */
+
+.tools-opacity-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    color: #666666;
+}
+
+
+#territory-opacity-value {
+    color: #333333;
+}
+
+
+/* Ползунок */
+
+#territory-opacity {
+    width: 100%;
+
+    margin: 0;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   ИНСТРУМЕНТЫ — ТЁМНАЯ ТЕМА
+   ========================= */
+
+body.dark-theme #tools-toggle {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+body.dark-theme #tools-toggle:hover {
+    background: #303134;
+}
+
+
+body.dark-theme #tools-panel {
+    background: #202124;
+    color: #eeeeee;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0, 0, 0, 0.6);
+}
+
+
+body.dark-theme .tools-title {
+    border-bottom-color: #444444;
+}
+
+
+body.dark-theme .tools-opacity-header {
+    color: #bbbbbb;
+}
+
+
+body.dark-theme #territory-opacity-value {
+    color: #eeeeee;
+}
+
+
+body.dark-theme #territories-toggle,
+body.dark-theme #territory-borders-toggle {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #territories-toggle.enabled,
+body.dark-theme #territory-borders-toggle.enabled {
+    background: #eeeeee;
+    color: #202124;
+
+    border-color: #eeeeee;
+}
+
+
+/* =========================
+   ИЗМЕРЕНИЕ РАССТОЯНИЯ
+   ========================= */
+
+#distance-toggle {
+    width: 100%;
+
+    padding: 8px 10px;
+
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#distance-toggle:hover {
+    background: #eeeeee;
+}
+
+
+#distance-toggle:active {
+    transform: scale(0.98);
+}
+
+
+/* Когда режим измерения включён */
+
+#distance-toggle.active {
+    background: #333333;
+    color: white;
+
+    border-color: #333333;
+}
+
+
+/* Блок с результатом */
+
+#distance-info {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 8px;
+
+    padding: 8px;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+
+    background: #f5f5f5;
+}
+
+
+#distance-info.hidden {
+    display: none;
+}
+
+
+/* Само расстояние */
+
+#distance-value {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* Кнопка очистки */
+
+#distance-clear {
+    padding: 5px 8px;
+
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+
+    background: white;
+
+    font-size: 11px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+#distance-clear:hover {
+    background: #e8e8e8;
+}
+
+
+/* =========================
+   ТЁМНАЯ ТЕМА
+   ========================= */
+
+body.dark-theme #distance-toggle {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #distance-toggle:hover {
+    background: #3c4043;
+}
+
+
+body.dark-theme #distance-toggle.active {
+    background: #eeeeee;
+    color: #202124;
+
+    border-color: #eeeeee;
+}
+
+
+body.dark-theme #distance-info {
+    background: #303134;
+
+    border-color: #5f6368;
+
+    color: #eeeeee;
+}
+
+
+body.dark-theme #distance-clear {
+    background: #202124;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #distance-clear:hover {
+    background: #3c4043;
+}
+
+
+/* =========================
+   ПОДПИСЬ РАССТОЯНИЯ НА КАРТЕ
+   ========================= */
+
+.measurement-distance-label {
+    padding: 4px 7px;
+
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    color: #202020;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 1px 4px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+/* Убираем стандартную стрелочку Leaflet */
+
+.measurement-distance-label::before {
+    display: none;
+}
+
+
+/* =========================
+   КООРДИНАТЫ КУРСОРА
+   ========================= */
+
+#coordinates-toggle {
+    width: 100%;
+
+    padding: 8px 10px;
+
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+#coordinates-toggle:hover {
+    background: #eeeeee;
+}
+
+
+#coordinates-toggle:active {
+    transform: scale(0.98);
+}
+
+
+/* Когда режим координат включён */
+
+#coordinates-toggle.active {
+    background: #333333;
+    color: white;
+
+    border-color: #333333;
+}
+
+
+/* Блок с координатами */
+
+#coordinates-info {
+    margin-top: 8px;
+
+    padding: 8px;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+
+    background: #f5f5f5;
+
+    text-align: center;
+}
+
+
+#coordinates-info.hidden {
+    display: none;
+}
+
+
+/* Само значение */
+
+#coordinates-value {
+    font-size: 13px;
+    font-weight: bold;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    user-select: text;
+
+    cursor: pointer;
+}
+
+
+#coordinates-value:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   ТЁМНАЯ ТЕМА
+   ========================= */
+
+body.dark-theme #coordinates-toggle {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+body.dark-theme #coordinates-toggle:hover {
+    background: #3c4043;
+}
+
+
+body.dark-theme #coordinates-toggle.active {
+    background: #eeeeee;
+    color: #202124;
+
+    border-color: #eeeeee;
+}
+
+
+body.dark-theme #coordinates-info {
+    background: #303134;
+    color: #eeeeee;
+
+    border-color: #5f6368;
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.0
+   ОСНОВНАЯ ПРАВАЯ TOOLBAR
+   ================================================== */
+
+
+/* Общая панель */
+
+#map-toolbar {
+    position: fixed;
+
+    top: 16px;
+    right: 16px;
+
+    z-index: 1400;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 42px;
+
+    background: #f7f6f2;
+
+    border: 1px solid #c8cbc4;
+
+    border-radius: 6px;
+
+    box-shadow:
+        0 4px 16px
+        rgba(20, 24, 20, 0.16);
+}
+
+
+/* Теперь каждый control живёт внутри toolbar */
+
+#map-toolbar #basemap-control,
+#map-toolbar #search-control,
+#map-toolbar #settings-control,
+#map-toolbar #tools-control {
+    position: relative;
+
+    top: auto;
+    right: auto;
+
+    width: 42px;
+    height: 42px;
+
+    z-index: auto;
+}
+
+
+/* Разделители между инструментами */
+
+#map-toolbar #search-control,
+#map-toolbar #settings-control,
+#map-toolbar #tools-control {
+    border-top:
+        1px solid #d7d9d3;
+}
+
+
+/* Все четыре главные кнопки */
+
+#map-toolbar #basemap-toggle,
+#map-toolbar #search-toggle,
+#map-toolbar #settings-toggle,
+#map-toolbar #tools-toggle {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    color: #333832;
+
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 120ms ease,
+        color 120ms ease;
+}
+
+
+/* Скругление только внешних углов toolbar */
+
+#map-toolbar #basemap-toggle {
+    border-radius:
+        5px
+        5px
+        0
+        0;
+}
+
+
+#map-toolbar #tools-toggle {
+    border-radius:
+        0
+        0
+        5px
+        5px;
+}
+
+
+/* Hover */
+
+#map-toolbar #basemap-toggle:hover,
+#map-toolbar #search-toggle:hover,
+#map-toolbar #settings-toggle:hover,
+#map-toolbar #tools-toggle:hover {
+    background: #e6e5df;
+
+    color: #1f231f;
+}
+
+
+/* Никаких мультяшных scale-анимаций */
+
+#map-toolbar #basemap-toggle:active,
+#map-toolbar #search-toggle:active,
+#map-toolbar #settings-toggle:active,
+#map-toolbar #tools-toggle:active {
+    transform: none;
+
+    background: #dcddd6;
+}
+
+
+/* SVG-иконки */
+
+.toolbar-icon {
+    width: 19px;
+    height: 19px;
+
+    fill: none;
+
+    stroke: currentColor;
+    stroke-width: 1.7;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+
+/* ==================================================
+   ВСПЛЫВАЮЩИЕ ОКНА ОТ TOOLBAR
+   ================================================== */
+
+#map-toolbar #basemap-menu,
+#map-toolbar #search-panel,
+#map-toolbar #settings-panel,
+#map-toolbar #tools-panel {
+    top: 0;
+    right: 50px;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 6px;
+
+    background: #f7f6f2;
+
+    box-shadow:
+        0 6px 22px
+        rgba(20, 24, 20, 0.18);
+}
+
+
+/* ==================================================
+   ТЁМНАЯ ТЕМА TOOLBAR
+   ================================================== */
+
+body.dark-theme #map-toolbar {
+    background: #202420;
+
+    border-color: #3a4039;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.38);
+}
+
+
+body.dark-theme #map-toolbar #search-control,
+body.dark-theme #map-toolbar #settings-control,
+body.dark-theme #map-toolbar #tools-control {
+    border-top-color: #343a34;
+}
+
+
+body.dark-theme #map-toolbar #basemap-toggle,
+body.dark-theme #map-toolbar #search-toggle,
+body.dark-theme #map-toolbar #settings-toggle,
+body.dark-theme #map-toolbar #tools-toggle {
+    background: transparent;
+
+    color: #b9bfb7;
+
+    box-shadow: none;
+}
+
+
+body.dark-theme #map-toolbar #basemap-toggle:hover,
+body.dark-theme #map-toolbar #search-toggle:hover,
+body.dark-theme #map-toolbar #settings-toggle:hover,
+body.dark-theme #map-toolbar #tools-toggle:hover {
+    background: #292e29;
+
+    color: #e7e9e5;
+}
+
+
+body.dark-theme #map-toolbar #basemap-toggle:active,
+body.dark-theme #map-toolbar #search-toggle:active,
+body.dark-theme #map-toolbar #settings-toggle:active,
+body.dark-theme #map-toolbar #tools-toggle:active {
+    background: #313731;
+}
+
+
+/* Панели */
+
+body.dark-theme #map-toolbar #basemap-menu,
+body.dark-theme #map-toolbar #search-panel,
+body.dark-theme #map-toolbar #settings-panel,
+body.dark-theme #map-toolbar #tools-panel {
+    background: #202420;
+
+    border-color: #3a4039;
+
+    color: #e7e9e5;
+
+    box-shadow:
+        0 8px 26px
+        rgba(0, 0, 0, 0.42);
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.1
+   ВСПЛЫВАЮЩИЕ ПАНЕЛИ
+   ================================================== */
+
+
+/* Общая типографика панелей */
+
+#basemap-menu,
+#search-panel,
+#settings-panel,
+#tools-panel {
+    font-family:
+        Arial,
+        sans-serif;
+
+    color: #20231f;
+}
+
+
+/* Заголовки */
+
+.basemap-title,
+#settings-title,
+.tools-title {
+    margin: 0 0 12px;
+
+    padding: 0 0 9px;
+
+    border-bottom:
+        1px solid #d7d9d3;
+
+    color: #555c54;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    letter-spacing: 1.15px;
+
+    text-transform: uppercase;
+}
+
+
+/* ==================================================
+   ПОДЛОЖКИ
+   ================================================== */
+
+.basemap-option {
+    position: relative;
+
+    margin: 0;
+
+    padding:
+        9px
+        10px
+        9px
+        13px;
+
+    border: 0;
+    border-radius: 3px;
+
+    background: transparent;
+
+    color: #343934;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition:
+        background 100ms ease,
+        color 100ms ease;
+}
+
+
+.basemap-option + .basemap-option {
+    margin-top: 2px;
+}
+
+
+.basemap-option:hover {
+    background: #e9e9e3;
+}
+
+
+.basemap-option.active {
+    background: #e1e2da;
+
+    color: #20231f;
+
+    font-weight: 600;
+}
+
+
+/* Небольшая метка выбранной подложки */
+
+.basemap-option.active::before {
+    content: "";
+
+    position: absolute;
+
+    top: 8px;
+    bottom: 8px;
+    left: 4px;
+
+    width: 2px;
+
+    background: #666b52;
+}
+
+
+/* ==================================================
+   ПОИСК
+   ================================================== */
+
+#search-panel {
+    width: 340px;
+
+    padding: 11px;
+}
+
+
+.search-row {
+    gap: 5px;
+}
+
+
+#place-search-input {
+    height: 36px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 4px;
+
+    background: #fdfcf8;
+
+    color: #20231f;
+
+    font-size: 13px;
+
+    box-shadow: none;
+}
+
+
+#place-search-input:focus {
+    border-color: #777e70;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(102, 107, 82, 0.15);
+}
+
+
+#place-search-button {
+    height: 36px;
+
+    padding: 0 13px;
+
+    border:
+        1px solid #666b52;
+
+    border-radius: 4px;
+
+    background: #666b52;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow: none;
+
+    transition:
+        background 100ms ease;
+}
+
+
+#place-search-button:hover {
+    background: #565b45;
+}
+
+
+#place-search-results {
+    margin-top: 7px;
+
+    padding-top: 6px;
+
+    border-top:
+        1px solid #d7d9d3;
+}
+
+
+.place-search-result {
+    padding:
+        8px
+        9px;
+
+    border-radius: 3px;
+
+    background: transparent;
+
+    color: #292e29;
+}
+
+
+.place-search-result:hover {
+    background: #e9e9e3;
+}
+
+
+.place-search-result-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.place-search-result-full {
+    margin-top: 3px;
+
+    color: #777d75;
+
+    font-size: 11px;
+    font-weight: 400;
+}
+
+
+/* ==================================================
+   НАСТРОЙКИ
+   ================================================== */
+
+#settings-panel {
+    width: 225px;
+
+    padding: 13px;
+}
+
+
+.settings-section {
+    margin-top: 14px;
+}
+
+
+.settings-label {
+    margin-bottom: 7px;
+
+    color: #777d75;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.85px;
+
+    text-transform: uppercase;
+}
+
+
+/* Кнопка темы */
+
+#theme-toggle {
+    padding:
+        8px
+        9px;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 4px;
+
+    background: transparent;
+
+    color: #343934;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    box-shadow: none;
+}
+
+
+#theme-toggle:hover {
+    background: #e9e9e3;
+}
+
+
+/* Языки как компактный segmented control */
+
+#language-options {
+    gap: 0;
+
+    overflow: hidden;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 4px;
+}
+
+
+.language-option {
+    padding: 7px 4px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    color: #5e655d;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    box-shadow: none;
+}
+
+
+.language-option +
+.language-option {
+    border-left:
+        1px solid #c8cbc4;
+}
+
+
+.language-option:hover {
+    background: #e9e9e3;
+}
+
+
+.language-option.active {
+    background: #666b52;
+
+    color: white;
+
+    border-color: transparent;
+}
+
+
+/* ==================================================
+   ИНСТРУМЕНТЫ
+   ================================================== */
+
+#tools-panel {
+    width: 245px;
+
+    padding: 13px;
+}
+
+
+.tools-section {
+    margin-top: 0;
+
+    padding:
+        10px
+        0;
+}
+
+
+.tools-section +
+.tools-section {
+    border-top:
+        1px solid #e0e1dc;
+}
+
+
+.tools-row {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* ON / OFF */
+
+#territories-toggle {
+    min-width: auto;
+
+    padding: 4px 7px;
+
+    border: 0;
+    border-radius: 3px;
+
+    background: #e1e2dc;
+
+    color: #5f655d;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+
+#territories-toggle.enabled {
+    background: #666b52;
+
+    color: #ffffff;
+
+    border: 0;
+}
+
+
+/* Прозрачность */
+
+.tools-opacity-header {
+    margin-bottom: 7px;
+
+    color: #777d75;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.55px;
+
+    text-transform: uppercase;
+}
+
+
+#territory-opacity-value {
+    color: #555c54;
+
+    font-variant-numeric:
+        tabular-nums;
+}
+
+
+/* Линейка и координаты */
+
+#distance-toggle,
+#coordinates-toggle {
+    position: relative;
+
+    width: 100%;
+
+    padding:
+        8px
+        3px;
+
+    border: 0;
+    border-radius: 2px;
+
+    background: transparent;
+
+    color: #343934;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    text-align: left;
+
+    box-shadow: none;
+}
+
+
+#distance-toggle:hover,
+#coordinates-toggle:hover {
+    background: #e9e9e3;
+}
+
+
+#distance-toggle.active,
+#coordinates-toggle.active {
+    background: #e1e2da;
+
+    color: #20231f;
+}
+
+
+/* Результаты инструментов */
+
+#distance-info,
+#coordinates-info {
+    margin-top: 6px;
+
+    padding: 7px 8px;
+
+    border:
+        1px solid #d7d9d3;
+
+    border-radius: 3px;
+
+    background: #eeeee9;
+
+    color: #353a35;
+
+    box-shadow: none;
+}
+
+
+#distance-value,
+#coordinates-value {
+    font-variant-numeric:
+        tabular-nums;
+}
+
+
+#distance-clear {
+    padding:
+        4px
+        7px;
+
+    border: 0;
+    border-radius: 3px;
+
+    background: #dadcd5;
+
+    color: #555c54;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+#distance-clear:hover {
+    background: #ced0c8;
+}
+
+
+/* ==================================================
+   DARK — ВСПЛЫВАЮЩИЕ ПАНЕЛИ
+   ================================================== */
+
+body.dark-theme .basemap-title,
+body.dark-theme #settings-title,
+body.dark-theme .tools-title {
+    color: #9ea59d;
+
+    border-bottom-color: #3a4039;
+}
+
+
+body.dark-theme .basemap-option {
+    background: transparent;
+
+    color: #c5cac3;
+
+    border: 0;
+}
+
+
+body.dark-theme .basemap-option:hover {
+    background: #292e29;
+}
+
+
+body.dark-theme .basemap-option.active {
+    background: #313731;
+
+    color: #e7e9e5;
+}
+
+
+body.dark-theme .basemap-option.active::before {
+    background: #a4a27c;
+}
+
+
+/* Поиск */
+
+body.dark-theme #place-search-input {
+    background: #171a18;
+
+    color: #e7e9e5;
+
+    border-color: #3a4039;
+}
+
+
+body.dark-theme #place-search-input:focus {
+    border-color: #777e70;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(164, 162, 124, 0.16);
+}
+
+
+body.dark-theme #place-search-button {
+    background: #73745a;
+
+    color: #f1f2ee;
+
+    border-color: #73745a;
+}
+
+
+body.dark-theme #place-search-button:hover {
+    background: #858569;
+}
+
+
+body.dark-theme .place-search-result {
+    background: transparent;
+
+    color: #e1e4df;
+}
+
+
+body.dark-theme .place-search-result:hover {
+    background: #292e29;
+}
+
+
+body.dark-theme .place-search-result-full {
+    color: #90978f;
+}
+
+
+/* Настройки */
+
+body.dark-theme .settings-label {
+    color: #9ea59d;
+}
+
+
+body.dark-theme #theme-toggle {
+    background: transparent;
+
+    color: #d9ddd7;
+
+    border-color: #3a4039;
+}
+
+
+body.dark-theme #theme-toggle:hover {
+    background: #292e29;
+}
+
+
+body.dark-theme #language-options {
+    border-color: #3a4039;
+}
+
+
+body.dark-theme .language-option {
+    background: transparent;
+
+    color: #abb1aa;
+
+    border: 0;
+}
+
+
+body.dark-theme .language-option +
+body.dark-theme .language-option {
+    border-left:
+        1px solid #3a4039;
+}
+
+
+body.dark-theme .language-option:hover {
+    background: #292e29;
+}
+
+
+body.dark-theme .language-option.active {
+    background: #a4a27c;
+
+    color: #171a18;
+}
+
+
+/* Инструменты */
+
+body.dark-theme .tools-section +
+body.dark-theme .tools-section {
+    border-top-color: #343a34;
+}
+
+
+body.dark-theme #territories-toggle {
+    background: #313731;
+
+    color: #abb1aa;
+
+    border: 0;
+}
+
+
+body.dark-theme #territories-toggle.enabled {
+    background: #a4a27c;
+
+    color: #171a18;
+}
+
+
+body.dark-theme .tools-opacity-header {
+    color: #9ea59d;
+}
+
+
+body.dark-theme #territory-opacity-value {
+    color: #c5cac3;
+}
+
+
+body.dark-theme #distance-toggle,
+body.dark-theme #coordinates-toggle {
+    background: transparent;
+
+    color: #c5cac3;
+
+    border: 0;
+}
+
+
+body.dark-theme #distance-toggle:hover,
+body.dark-theme #coordinates-toggle:hover {
+    background: #292e29;
+}
+
+
+body.dark-theme #distance-toggle.active,
+body.dark-theme #coordinates-toggle.active {
+    background: #313731;
+
+    color: #e7e9e5;
+}
+
+
+body.dark-theme #distance-info,
+body.dark-theme #coordinates-info {
+    background: #171a18;
+
+    color: #d9ddd7;
+
+    border-color: #3a4039;
+}
+
+
+body.dark-theme #distance-clear {
+    background: #313731;
+
+    color: #abb1aa;
+
+    border: 0;
+}
+
+
+body.dark-theme #distance-clear:hover {
+    background: #3a4039;
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.2
+   ЛЕВАЯ ПАНЕЛЬ / SIDEBAR
+   ================================================== */
+
+
+/* --------------------------------------------------
+   ОСНОВА SIDEBAR
+   -------------------------------------------------- */
+
+#sidebar {
+    width: 292px;
+    height: 100%;
+
+    padding:
+        0
+        16px
+        14px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0;
+
+    overflow: hidden;
+
+    background:
+        #eeede8;
+
+    border-right:
+        1px solid #c8cbc4;
+
+    box-shadow:
+        4px 0 18px
+        rgba(20, 24, 20, 0.12);
+
+    font-family:
+        "Inter",
+        Arial,
+        sans-serif;
+}
+
+
+/* --------------------------------------------------
+   ВЕРХНЯЯ КАМУФЛЯЖНАЯ ШАПКА
+   -------------------------------------------------- */
+
+.sidebar-header {
+    position: relative;
+
+    flex-shrink: 0;
+
+    height: 82px;
+
+    margin:
+        0
+        -16px
+        14px;
+
+    padding:
+        15px
+        48px
+        14px
+        17px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    background-image:
+        linear-gradient(
+            rgba(18, 21, 17, 0.58),
+            rgba(18, 21, 17, 0.76)
+        ),
+        url("camo.jpg");
+
+    background-size:
+        auto,
+        260px auto;
+
+    background-position:
+        center,
+        top left;
+
+    border-bottom:
+        1px solid
+        rgba(30, 34, 29, 0.65);
+}
+
+
+/* Небольшая нижняя линия-акцент */
+
+.sidebar-header::after {
+    content: "";
+
+    position: absolute;
+
+    left: 17px;
+    bottom: 0;
+
+    width: 42px;
+    height: 2px;
+
+    background:
+        #b4b18a;
+}
+
+
+/* --------------------------------------------------
+   БРЕНД
+   -------------------------------------------------- */
+
+.sidebar-brand {
+    min-width: 0;
+}
+
+
+#sidebar .map-title {
+    margin: 0;
+    padding: 0;
+
+    color: #f2f3ef;
+
+    font-family:
+        "IBM Plex Sans Condensed",
+        sans-serif;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    letter-spacing: 0.8px;
+
+    text-align: left;
+
+    text-shadow: none;
+}
+
+
+.map-subtitle {
+    margin-top: 6px;
+
+    color:
+        rgba(232, 235, 228, 0.68);
+
+    font-family:
+        "IBM Plex Mono",
+        monospace;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    line-height: 1;
+
+    letter-spacing: 1.55px;
+
+    text-transform: uppercase;
+}
+
+
+/* --------------------------------------------------
+   КНОПКА ЗАКРЫТИЯ
+   -------------------------------------------------- */
+
+#close-sidebar {
+    top: 13px;
+    right: 13px;
+
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(232, 235, 228, 0.24);
+
+    border-radius: 4px;
+
+    background:
+        rgba(15, 18, 15, 0.28);
+
+    color:
+        rgba(241, 243, 238, 0.88);
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 20px;
+    font-weight: 300;
+
+    line-height: 24px;
+
+    box-shadow: none;
+}
+
+
+#close-sidebar:hover {
+    background:
+        rgba(241, 243, 238, 0.10);
+
+    border-color:
+        rgba(241, 243, 238, 0.42);
+}
+
+
+#close-sidebar:active {
+    transform: none;
+
+    background:
+        rgba(241, 243, 238, 0.16);
+}
+
+
+/* --------------------------------------------------
+   РАЗДЕЛИТЕЛИ
+   -------------------------------------------------- */
+
+.sidebar-divider {
+    flex-shrink: 0;
+
+    height: 1px;
+
+    margin:
+        12px
+        0;
+
+    background:
+        #d2d4ce;
+
+    box-shadow: none;
+}
+
+
+/* Первый разделитель после шапки почти не нужен */
+
+.sidebar-header +
+.sidebar-divider {
+    margin-top: 0;
+}
+
+
+/* --------------------------------------------------
+   УБИРАЕМ СТАРЫЕ КАРТОЧКИ
+   -------------------------------------------------- */
+
+.legend-box,
+.updates-box {
+    border: 0;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+}
+
+
+/* --------------------------------------------------
+   ЗАГОЛОВКИ СЕКЦИЙ
+   -------------------------------------------------- */
+
+.legend-box h2,
+.updates-box h2 {
+    margin:
+        0
+        0
+        12px;
+
+    padding: 0;
+
+    border: 0;
+
+    color: #6a7068;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    letter-spacing: 1.25px;
+
+    text-transform: uppercase;
+}
+
+
+/* --------------------------------------------------
+   ЛЕГЕНДА
+   -------------------------------------------------- */
+
+.legend-box {
+    flex-shrink: 0;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+.legend-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0;
+
+    min-height: 28px;
+
+    color: #303530;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+.legend-color {
+    flex-shrink: 0;
+
+    width: 12px;
+    height: 12px;
+
+    margin: 0;
+
+    border:
+        1px solid
+        rgba(30, 34, 29, 0.48);
+
+    border-radius: 1px;
+
+    box-shadow: none;
+}
+
+
+/* --------------------------------------------------
+   ЛЕНТА ОБНОВЛЕНИЙ
+   -------------------------------------------------- */
+
+.updates-box {
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+.updates-box h2 {
+    flex-shrink: 0;
+
+    margin-bottom: 9px;
+}
+
+
+#updates-feed {
+    flex: 1;
+
+    min-height: 0;
+
+    padding: 0 4px 0 0;
+
+    overflow-y: auto;
+}
+
+
+/* --------------------------------------------------
+   ОДНО ОБНОВЛЕНИЕ
+   -------------------------------------------------- */
+
+.update-item {
+    position: relative;
+
+    margin: 0;
+
+    padding:
+        12px
+        4px
+        13px
+        13px;
+
+    border: 0;
+
+    border-bottom:
+        1px solid #d8dad4;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+
+    transition:
+        background 100ms ease;
+}
+
+
+/* Убираем старую толстую полоску */
+
+.update-item::before {
+    top: 14px;
+    bottom: auto;
+    left: 1px;
+
+    width: 3px;
+    height: 18px;
+
+    border-radius: 1px;
+
+    background:
+        #77795e;
+}
+
+
+.update-item:hover {
+    transform: none;
+
+    background:
+        rgba(102, 107, 82, 0.055);
+}
+
+
+/* --------------------------------------------------
+   ДАТА ОБНОВЛЕНИЯ
+   -------------------------------------------------- */
+
+.update-date {
+    margin-bottom: 5px;
+
+    color: #777d75;
+
+    font-family:
+        "IBM Plex Mono",
+        monospace;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    line-height: 1;
+
+    letter-spacing: 0.55px;
+
+    font-variant-numeric:
+        tabular-nums;
+}
+
+
+/* --------------------------------------------------
+   ТЕКСТ ОБНОВЛЕНИЯ
+   -------------------------------------------------- */
+
+.update-text {
+    color: #292e29;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 400;
+
+    line-height: 1.45;
+}
+
+
+/* --------------------------------------------------
+   СКРОЛЛ ЛЕНТЫ
+   -------------------------------------------------- */
+
+#updates-feed {
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #aaaea6
+        transparent;
+}
+
+
+#updates-feed::-webkit-scrollbar {
+    width: 4px;
+}
+
+
+#updates-feed::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+#updates-feed::-webkit-scrollbar-thumb {
+    border-radius: 0;
+
+    background: #aaaea6;
+}
+
+
+/* --------------------------------------------------
+   КНОПКА ОТКРЫТИЯ SIDEBAR
+   -------------------------------------------------- */
+
+#open-sidebar {
+    width: 42px;
+    height: 42px;
+
+    top: 16px;
+    left: 16px;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 6px;
+
+    background: #f7f6f2;
+
+    color: #343934;
+
+    box-shadow:
+        0 4px 16px
+        rgba(20, 24, 20, 0.16);
+
+    font-size: 19px;
+    font-weight: 400;
+}
+
+
+#open-sidebar:hover {
+    background: #e6e5df;
+}
+
+
+/* ==================================================
+   SIDEBAR — DARK THEME
+   ================================================== */
+
+body.dark-theme #sidebar {
+    background:
+        #171a18;
+
+    border-right-color:
+        #343a34;
+
+    box-shadow:
+        4px 0 20px
+        rgba(0, 0, 0, 0.32);
+}
+
+
+/* Камуфляж остаётся,
+   но становится чуть глубже */
+
+body.dark-theme .sidebar-header {
+    background-image:
+        linear-gradient(
+            rgba(8, 10, 8, 0.62),
+            rgba(8, 10, 8, 0.80)
+        ),
+        url("camo.jpg");
+
+    border-bottom-color:
+        #30352f;
+}
+
+
+body.dark-theme .sidebar-header::after {
+    background:
+        #a4a27c;
+}
+
+
+body.dark-theme #sidebar .map-title {
+    color:
+        #f0f2ed;
+
+    text-shadow: none;
+}
+
+
+body.dark-theme .map-subtitle {
+    color:
+        rgba(218, 222, 215, 0.58);
+}
+
+
+/* Разделители */
+
+body.dark-theme .sidebar-divider {
+    background:
+        #30352f;
+
+    box-shadow: none;
+}
+
+
+/* Карточек больше нет */
+
+body.dark-theme .legend-box,
+body.dark-theme .updates-box {
+    background: transparent;
+
+    border: 0;
+
+    box-shadow: none;
+}
+
+
+/* Заголовки */
+
+body.dark-theme .legend-box h2,
+body.dark-theme .updates-box h2 {
+    color:
+        #8e958d;
+
+    border: 0;
+}
+
+
+/* Легенда */
+
+body.dark-theme .legend-item {
+    color:
+        #d1d5cf;
+}
+
+
+body.dark-theme .legend-color {
+    border-color:
+        rgba(225, 229, 222, 0.40);
+
+    box-shadow: none;
+}
+
+
+/* Новости */
+
+body.dark-theme .update-item {
+    background: transparent;
+
+    border-color:
+        #2e332e;
+
+    box-shadow: none;
+}
+
+
+body.dark-theme .update-item:hover {
+    background:
+        rgba(164, 162, 124, 0.055);
+}
+
+
+body.dark-theme .update-item::before {
+    background:
+        #858569;
+}
+
+
+body.dark-theme .update-date {
+    color:
+        #858c84;
+}
+
+
+body.dark-theme .update-text {
+    color:
+        #d3d7d1;
+}
+
+
+/* Скролл */
+
+body.dark-theme #updates-feed {
+    scrollbar-color:
+        #51584f
+        transparent;
+}
+
+
+body.dark-theme #updates-feed::-webkit-scrollbar-thumb {
+    background:
+        #51584f;
+}
+
+
+/* Открытие sidebar */
+
+body.dark-theme #open-sidebar {
+    background:
+        #202420;
+
+    color:
+        #b9bfb7;
+
+    border-color:
+        #3a4039;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.38);
+}
+
+
+body.dark-theme #open-sidebar:hover {
+    background:
+        #292e29;
+
+    color:
+        #e7e9e5;
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.3
+   ИСТОРИЯ КАРТЫ
+   ================================================== */
+
+
+/* --------------------------------------------------
+   ОСНОВНОЙ CONTROL
+   -------------------------------------------------- */
+
+#history-control {
+    position: fixed;
+
+    right: 16px;
+    bottom: 16px;
+
+    z-index: 1400;
+}
+
+
+/* --------------------------------------------------
+   КНОПКА КАЛЕНДАРЯ
+   -------------------------------------------------- */
+
+#history-toggle {
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 6px;
+
+    background:
+        #f7f6f2;
+
+    color:
+        #343934;
+
+    box-shadow:
+        0 4px 16px
+        rgba(20, 24, 20, 0.16);
+
+    cursor: pointer;
+
+    transition:
+        background 120ms ease,
+        color 120ms ease;
+}
+
+
+#history-toggle:hover {
+    background:
+        #e6e5df;
+
+    color:
+        #1f231f;
+}
+
+
+#history-toggle:active {
+    transform: none;
+
+    background:
+        #dcddd6;
+}
+
+
+/* SVG использует тот же стиль,
+   что и правая toolbar */
+
+#history-toggle .toolbar-icon {
+    width: 19px;
+    height: 19px;
+
+    fill: none;
+
+    stroke: currentColor;
+    stroke-width: 1.6;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* --------------------------------------------------
+   ПАНЕЛЬ ИСТОРИИ
+   -------------------------------------------------- */
+
+#history-panel {
+    position: absolute;
+
+    right: 0;
+    bottom: 50px;
+
+    width: 252px;
+
+    padding: 13px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 6px;
+
+    background:
+        #f7f6f2;
+
+    color:
+        #20231f;
+
+    box-shadow:
+        0 6px 22px
+        rgba(20, 24, 20, 0.18);
+
+    font-family:
+        "Inter",
+        Arial,
+        sans-serif;
+}
+
+
+/* --------------------------------------------------
+   ЗАГОЛОВОК
+   -------------------------------------------------- */
+
+.history-title {
+    margin:
+        0
+        0
+        12px;
+
+    padding:
+        0
+        0
+        9px;
+
+    border-bottom:
+        1px solid #d7d9d3;
+
+    color:
+        #555c54;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    letter-spacing: 1.15px;
+
+    text-align: left;
+
+    text-transform: uppercase;
+}
+
+
+/* --------------------------------------------------
+   НАВИГАЦИЯ ПО ДАТАМ
+   -------------------------------------------------- */
+
+.history-navigation {
+    display: grid;
+
+    grid-template-columns:
+        34px
+        1fr
+        34px;
+
+    align-items: stretch;
+
+    gap: 0;
+
+    overflow: visible;
+}
+
+
+/* Общий стиль стрелок */
+
+#history-prev,
+#history-next {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 0;
+
+    background:
+        #eeeee9;
+
+    color:
+        #555c54;
+
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transition:
+        background 100ms ease,
+        color 100ms ease;
+}
+
+
+#history-prev {
+    border-radius:
+        4px
+        0
+        0
+        4px;
+}
+
+
+#history-next {
+    border-radius:
+        0
+        4px
+        4px
+        0;
+}
+
+
+#history-prev:hover,
+#history-next:hover {
+    background:
+        #e1e2dc;
+
+    color:
+        #20231f;
+}
+
+
+#history-prev:not(:disabled):active,
+#history-next:not(:disabled):active {
+    transform: none;
+
+    background:
+        #d8dad3;
+}
+
+
+#history-prev:disabled,
+#history-next:disabled {
+    opacity: 0.32;
+
+    cursor: default;
+}
+
+
+/* Иконка стрелки */
+
+.history-arrow-icon {
+    width: 15px;
+    height: 15px;
+
+    fill: none;
+
+    stroke: currentColor;
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+
+/* --------------------------------------------------
+   ДАТА
+   -------------------------------------------------- */
+
+.history-date-wrapper {
+    position: relative;
+
+    min-width: 0;
+}
+
+
+#history-date {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+
+    padding:
+        0
+        8px;
+
+    border-top:
+        1px solid #c8cbc4;
+
+    border-right: 0;
+
+    border-bottom:
+        1px solid #c8cbc4;
+
+    border-left: 0;
+
+    border-radius: 0;
+
+    background:
+        #f7f6f2;
+
+    color:
+        #303530;
+
+    font-family:
+        "IBM Plex Mono",
+        monospace;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 0.15px;
+
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transition:
+        background 100ms ease;
+}
+
+
+#history-date:hover {
+    background:
+        #e9e9e3;
+}
+
+
+#history-date:active {
+    transform: none;
+
+    background:
+        #e1e2dc;
+}
+
+
+/* --------------------------------------------------
+   СТАТУС
+   -------------------------------------------------- */
+
+#history-status {
+    position: relative;
+
+    margin-top: 10px;
+
+    padding:
+        5px
+        4px
+        5px
+        17px;
+
+    border: 0;
+    border-radius: 0;
+
+    background:
+        transparent;
+
+    color:
+        #777d75;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    letter-spacing: 0.35px;
+
+    text-align: left;
+}
+
+
+/* Маленький индикатор состояния */
+
+#history-status::before {
+    content: "";
+
+    position: absolute;
+
+    left: 4px;
+    top: 50%;
+
+    width: 5px;
+    height: 5px;
+
+    transform:
+        translateY(-50%);
+
+    border-radius: 50%;
+
+    background:
+        #77795e;
+}
+
+
+/* --------------------------------------------------
+   АКТУАЛЬНАЯ ВЕРСИЯ
+   -------------------------------------------------- */
+
+#history-latest {
+    width: 100%;
+
+    margin-top: 8px;
+
+    padding:
+        7px
+        9px;
+
+    border:
+        1px solid #9a9d83;
+
+    border-radius: 4px;
+
+    background:
+        transparent;
+
+    color:
+        #62674f;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transition:
+        background 100ms ease,
+        color 100ms ease;
+}
+
+
+#history-latest:hover {
+    background:
+        #e5e5dc;
+
+    color:
+        #464a38;
+}
+
+
+#history-latest:active {
+    transform: none;
+}
+
+
+/* --------------------------------------------------
+   СПИСОК ДАТ
+   -------------------------------------------------- */
+
+#history-date-list {
+    position: absolute;
+
+    right: 50%;
+    bottom: 40px;
+
+    transform:
+        translateX(50%);
+
+    width: 156px;
+
+    max-height: 260px;
+
+    padding: 4px;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+
+    border:
+        1px solid #c8cbc4;
+
+    border-radius: 5px;
+
+    background:
+        #f7f6f2;
+
+    box-shadow:
+        0 6px 20px
+        rgba(20, 24, 20, 0.18);
+
+    z-index: 1600;
+}
+
+
+.history-date-option {
+    position: relative;
+
+    width: 100%;
+
+    padding:
+        7px
+        8px
+        7px
+        11px;
+
+    border: 0;
+    border-radius: 2px;
+
+    background:
+        transparent;
+
+    color:
+        #555c54;
+
+    font-family:
+        "IBM Plex Mono",
+        monospace;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.history-date-option +
+.history-date-option {
+    margin-top: 1px;
+}
+
+
+.history-date-option:hover {
+    background:
+        #e9e9e3;
+}
+
+
+.history-date-option.active {
+    background:
+        #e1e2da;
+
+    color:
+        #20231f;
+
+    font-weight: 600;
+}
+
+
+/* Маленькая полоска у выбранной даты */
+
+.history-date-option.active::before {
+    content: "";
+
+    position: absolute;
+
+    top: 6px;
+    bottom: 6px;
+    left: 3px;
+
+    width: 2px;
+
+    background:
+        #666b52;
+}
+
+
+/* Скролл списка дат */
+
+#history-date-list {
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #aaaea6
+        transparent;
+}
+
+
+#history-date-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+
+#history-date-list::-webkit-scrollbar-thumb {
+    background:
+        #aaaea6;
+}
+
+
+/* ==================================================
+   HISTORY — DARK THEME
+   ================================================== */
+
+body.dark-theme #history-toggle {
+    background:
+        #202420;
+
+    color:
+        #b9bfb7;
+
+    border-color:
+        #3a4039;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.38);
+}
+
+
+body.dark-theme #history-toggle:hover {
+    background:
+        #292e29;
+
+    color:
+        #e7e9e5;
+}
+
+
+body.dark-theme #history-toggle:active {
+    background:
+        #313731;
+}
+
+
+/* Панель */
+
+body.dark-theme #history-panel {
+    background:
+        #202420;
+
+    color:
+        #e7e9e5;
+
+    border-color:
+        #3a4039;
+
+    box-shadow:
+        0 8px 26px
+        rgba(0, 0, 0, 0.42);
+}
+
+
+/* Заголовок */
+
+body.dark-theme .history-title {
+    color:
+        #9ea59d;
+
+    border-bottom-color:
+        #3a4039;
+}
+
+
+/* Навигация */
+
+body.dark-theme #history-prev,
+body.dark-theme #history-next {
+    background:
+        #292e29;
+
+    color:
+        #abb1aa;
+
+    border-color:
+        #3a4039;
+}
+
+
+body.dark-theme #history-prev:hover,
+body.dark-theme #history-next:hover {
+    background:
+        #313731;
+
+    color:
+        #e7e9e5;
+}
+
+
+body.dark-theme #history-date {
+    background:
+        #202420;
+
+    color:
+        #d6dad4;
+
+    border-color:
+        #3a4039;
+}
+
+
+body.dark-theme #history-date:hover {
+    background:
+        #292e29;
+}
+
+
+/* Статус */
+
+body.dark-theme #history-status {
+    background:
+        transparent;
+
+    color:
+        #90978f;
+}
+
+
+body.dark-theme #history-status::before {
+    background:
+        #a4a27c;
+}
+
+
+/* Кнопка актуальной версии */
+
+body.dark-theme #history-latest {
+    background:
+        transparent;
+
+    color:
+        #b5b493;
+
+    border-color:
+        #676851;
+}
+
+
+body.dark-theme #history-latest:hover {
+    background:
+        #292e29;
+
+    color:
+        #d1cfa6;
+}
+
+
+/* Список дат */
+
+body.dark-theme #history-date-list {
+    background:
+        #202420;
+
+    border-color:
+        #3a4039;
+
+    box-shadow:
+        0 8px 24px
+        rgba(0, 0, 0, 0.45);
+}
+
+
+body.dark-theme .history-date-option {
+    background:
+        transparent;
+
+    color:
+        #abb1aa;
+}
+
+
+body.dark-theme .history-date-option:hover {
+    background:
+        #292e29;
+}
+
+
+body.dark-theme .history-date-option.active {
+    background:
+        #313731;
+
+    color:
+        #e7e9e5;
+}
+
+
+body.dark-theme
+.history-date-option.active::before {
+    background:
+        #a4a27c;
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.4
+   ИКОНКИ ДЕЙСТВИЙ
+   ================================================== */
+
+.menu-action-icon {
+    flex-shrink: 0;
+
+    width: 15px;
+    height: 15px;
+
+    fill: none;
+
+    stroke: currentColor;
+    stroke-width: 1.65;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+
+/* Кнопки теперь используют
+   иконку + текст */
+
+#theme-toggle,
+#distance-toggle,
+#coordinates-toggle {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+/* Тема */
+
+#theme-toggle {
+    justify-content: flex-start;
+}
+
+
+/* Скрытая иконка солнца / луны */
+
+.menu-action-icon.is-hidden {
+    display: none;
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.5
+   SIDEBAR CONTROL ICONS
+   ================================================== */
+
+.sidebar-control-icon {
+    width: 17px;
+    height: 17px;
+
+    fill: none;
+
+    stroke: currentColor;
+    stroke-width: 1.7;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+
+/* Кнопка открытия sidebar */
+
+#open-sidebar {
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    font-size: 0;
+}
+
+
+#open-sidebar.visible {
+    display: flex;
+}
+
+
+/* Кнопка закрытия */
+
+#close-sidebar {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    font-size: 0;
+}
+
+
+#close-sidebar .sidebar-control-icon {
+    width: 15px;
+    height: 15px;
+
+    stroke-width: 1.65;
+}
+
+
+/* ==================================================
+   RUBIZH UI 2.6
+   МАРКЕР ПОИСКА НАСЕЛЁННОГО ПУНКТА
+   ================================================== */
+
+.search-result-marker-wrapper {
+    background: transparent;
+    border: 0;
+}
+
+.search-result-marker {
+    position: relative;
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: #f2f3ef;
+    border: 2px solid #171a18;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 0 0 3px rgba(164, 162, 124, 0.35);
+}
+
+.search-result-marker::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 6px;
+    height: 6px;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #6f7458;
+}
+
+.search-result-marker::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 28px;
+    height: 28px;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(242, 243, 239, 0.35);
+}
+
+
+/* Тёмная тема */
+
+body.dark-theme .search-result-marker {
+    background: #f2f3ef;
+    border-color: #111311;
+
+    box-shadow:
+        0 0 0 3px rgba(164, 162, 124, 0.28);
+}
+
+body.dark-theme .search-result-marker::before {
+    background: #70755b;
+}
+
+body.dark-theme .search-result-marker::after {
+    border-color: rgba(242, 243, 239, 0.22);
+}
+
+
+/* ==================================================
+   RUBIZH UI — ЕДИНЫЙ СТИЛЬ ON / OFF
+   ================================================== */
+
+#territories-toggle,
+#territory-borders-toggle {
+    min-width: auto;
+
+    padding: 4px 7px;
+
+    border: 0;
+    border-radius: 3px;
+
+    background: #e1e2dc;
+
+    color: #5f655d;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    line-height: normal;
+
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    box-shadow: none;
+}
+
+
+#territories-toggle.enabled,
+#territory-borders-toggle.enabled {
+    background: #666b52;
+
+    color: #ffffff;
+
+    border: 0;
+
+    box-shadow: none;
+}
+
+
+/* Тёмная тема */
+
+body.dark-theme #territories-toggle,
+body.dark-theme #territory-borders-toggle {
+    background: #313731;
+
+    color: #abb1aa;
+
+    border: 0;
+
+    box-shadow: none;
+}
+
+
+body.dark-theme #territories-toggle.enabled,
+body.dark-theme #territory-borders-toggle.enabled {
+    background: #a4a27c;
+
+    color: #171a18;
+
+    border: 0;
+
+    box-shadow: none;
+}
+
+
+/* =================================
+   ЛЕНТА ОБНОВЛЕНИЙ — ВРЕМЕННО СКРЫТА
+   ================================= */
+
+.updates-box {
+    display: none !important;
+}
+
+
+/* =================================
+   TELEGRAM BUTTON
+   ================================= */
+
+#telegram-map-button {
+    position: fixed;
+
+    top: 232px;
+    right: 15px;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    background: rgba(23, 26, 24, 0.94);
+    color: #e7e9e5;
+
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+
+    text-decoration: none;
+
+    z-index: 2000;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+}
+
+#telegram-map-button:hover {
+    transform: translateY(-1px);
+
+    background: #202420;
+    color: #a4a27c;
+
+    border-color: rgba(164, 162, 124, 0.26);
+
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+}
+
+#telegram-map-button:active {
+    transform: translateY(0);
+}
+
+.telegram-map-icon {
+    width: 20px;
+    height: 20px;
+
+    fill: currentColor;
+}
+
+/* =================================
+   TOP WATERMARK
+   ================================= */
+
+#map-watermark {
+    position: fixed;
+
+    top: 12px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 5px 12px;
+
+    border-radius: 6px;
+
+    background: rgba(247, 247, 242, 0.72);
+    backdrop-filter: blur(4px);
+
+    color: #171a18;
+
+    text-decoration: none;
+
+    font-family: "IBM Plex Sans Condensed", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    opacity: 0.78;
+
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
+
+    z-index: 1900;
+
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease,
+        background 0.18s ease,
+        color 0.18s ease;
+}
+
+#map-watermark:hover {
+    opacity: 1;
+
+    transform: translateX(-50%) translateY(-1px);
+
+    background: rgba(164, 162, 124, 0.92);
+    color: #171a18;
+}
+
+
+/* Тёмная тема */
+
+body.dark-theme #map-watermark {
+    background: rgba(23, 26, 24, 0.72);
+    color: #e7e9e5;
+
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+}
+
+body.dark-theme #map-watermark:hover {
+    background: rgba(164, 162, 124, 0.92);
+    color: #171a18;
+}
