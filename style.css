@@ -5224,3 +5224,395 @@ body.dark-theme #map-watermark:hover {
     background: rgba(164, 162, 124, 0.92);
     color: #171a18;
 }
+
+
+/* ==================================================
+   RUBIZH — MOBILE UI
+   ================================================== */
+
+@media (max-width: 768px) {
+
+    /* ----------------------------------------------
+       SIDEBAR
+       ---------------------------------------------- */
+
+    #sidebar {
+        width: min(86vw, 320px);
+        height: 100dvh;
+
+        padding:
+            0
+            14px
+            calc(14px + env(safe-area-inset-bottom));
+
+        z-index: 3000;
+    }
+
+
+    .sidebar-header {
+        height: 76px;
+
+        margin:
+            0
+            -14px
+            13px;
+
+        padding:
+            14px
+            46px
+            13px
+            15px;
+    }
+
+
+    #sidebar .map-title {
+        font-size: 19px;
+    }
+
+
+    .map-subtitle {
+        font-size: 8px;
+        letter-spacing: 1.35px;
+    }
+
+
+    #close-sidebar {
+        top:
+            calc(
+                11px +
+                env(safe-area-inset-top)
+            );
+
+        right: 11px;
+    }
+
+
+    /* ----------------------------------------------
+       КНОПКА ОТКРЫТИЯ SIDEBAR
+       ---------------------------------------------- */
+
+    #open-sidebar {
+        top:
+            calc(
+                12px +
+                env(safe-area-inset-top)
+            );
+
+        left:
+            calc(
+                12px +
+                env(safe-area-inset-left)
+            );
+
+        width: 40px;
+        height: 40px;
+
+        z-index: 2900;
+    }
+
+
+    /* ----------------------------------------------
+       ПРАВАЯ TOOLBAR
+       ---------------------------------------------- */
+
+    #map-toolbar {
+        top:
+            calc(
+                12px +
+                env(safe-area-inset-top)
+            );
+
+        right:
+            calc(
+                12px +
+                env(safe-area-inset-right)
+            );
+
+        width: 40px;
+    }
+
+
+    #map-toolbar #basemap-control,
+    #map-toolbar #search-control,
+    #map-toolbar #settings-control,
+    #map-toolbar #tools-control {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    #map-toolbar #basemap-toggle,
+    #map-toolbar #search-toggle,
+    #map-toolbar #settings-toggle,
+    #map-toolbar #tools-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .toolbar-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    /* ----------------------------------------------
+       ВСПЛЫВАЮЩИЕ ПАНЕЛИ TOOLBAR
+       ---------------------------------------------- */
+
+    #map-toolbar #basemap-menu,
+    #map-toolbar #search-panel,
+    #map-toolbar #settings-panel,
+    #map-toolbar #tools-panel {
+        right: 47px;
+
+        max-width:
+            calc(
+                100vw -
+                71px -
+                env(safe-area-inset-left) -
+                env(safe-area-inset-right)
+            );
+    }
+
+
+    #map-toolbar #basemap-menu {
+        width: 190px;
+    }
+
+
+    #map-toolbar #search-panel {
+        width:
+            min(
+                310px,
+                calc(100vw - 71px)
+            );
+    }
+
+
+    #map-toolbar #settings-panel {
+        width:
+            min(
+                220px,
+                calc(100vw - 71px)
+            );
+    }
+
+
+    #map-toolbar #tools-panel {
+        width:
+            min(
+                245px,
+                calc(100vw - 71px)
+            );
+
+        max-height:
+            calc(
+                100dvh -
+                24px -
+                env(safe-area-inset-top) -
+                env(safe-area-inset-bottom)
+            );
+
+        overflow-y: auto;
+    }
+
+
+    /* ----------------------------------------------
+       TELEGRAM
+       прямо под toolbar
+       ---------------------------------------------- */
+
+    #telegram-map-button {
+        top:
+            calc(
+                181px +
+                env(safe-area-inset-top)
+            );
+
+        right:
+            calc(
+                12px +
+                env(safe-area-inset-right)
+            );
+
+        width: 40px;
+        height: 40px;
+
+        border-radius: 10px;
+    }
+
+
+    .telegram-map-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    /* ----------------------------------------------
+       WATERMARK
+       ---------------------------------------------- */
+
+    #map-watermark {
+        top:
+            calc(
+                11px +
+                env(safe-area-inset-top)
+            );
+
+        padding:
+            4px
+            9px;
+
+        font-size: 13px;
+
+        letter-spacing: 1.5px;
+
+        border-radius: 5px;
+    }
+
+
+    /* ----------------------------------------------
+       ИСТОРИЯ
+       ---------------------------------------------- */
+
+    #history-control {
+        right:
+            calc(
+                12px +
+                env(safe-area-inset-right)
+            );
+
+        bottom:
+            calc(
+                12px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    #history-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    #history-panel {
+        right: 0;
+        bottom: 48px;
+
+        width:
+            min(
+                252px,
+                calc(100vw - 24px)
+            );
+
+        max-height:
+            calc(
+                100dvh -
+                90px -
+                env(safe-area-inset-top) -
+                env(safe-area-inset-bottom)
+            );
+
+        overflow-y: auto;
+    }
+
+
+    /* ----------------------------------------------
+       LEAFLET ATTRIBUTION
+       Чтобы не залезала на элементы
+       ---------------------------------------------- */
+
+    .leaflet-control-attribution {
+        max-width:
+            calc(100vw - 70px);
+
+        font-size: 9px;
+
+        white-space: normal;
+
+        text-align: right;
+    }
+
+}
+
+
+
+/* ==================================================
+   ОЧЕНЬ УЗКИЕ ТЕЛЕФОНЫ
+   ================================================== */
+
+@media (max-width: 430px) {
+
+    #sidebar {
+        width: 88vw;
+    }
+
+
+    #map-watermark {
+        font-size: 12px;
+
+        padding:
+            4px
+            8px;
+    }
+
+
+    #history-panel {
+        width:
+            min(
+                240px,
+                calc(100vw - 24px)
+            );
+    }
+
+
+    #place-search-input {
+        font-size: 16px;
+    }
+
+}
+
+
+/* ==================================================
+   MOBILE — СКРЫВАЕМ КОНТРОЛЫ
+   ПРИ ОТКРЫТОМ SIDEBAR
+   ================================================== */
+
+@media (max-width: 768px) {
+
+    body:has(#sidebar:not(.hidden))
+    #map-toolbar,
+
+    body:has(#sidebar:not(.hidden))
+    #telegram-map-button,
+
+    body:has(#sidebar:not(.hidden))
+    #map-watermark,
+
+    body:has(#sidebar:not(.hidden))
+    #history-control {
+
+        opacity: 0;
+        pointer-events: none;
+
+    }
+
+}
+
+
+/* ==================================================
+   MOBILE — УБИРАЕМ WATERMARK,
+   КОГДА ОТКРЫТО МЕНЮ ПОДЛОЖЕК
+   ================================================== */
+
+@media (max-width: 768px) {
+
+    body:has(#basemap-menu:not(.hidden))
+    #map-watermark {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+}

@@ -601,6 +601,28 @@ const closeSidebar =
     document.getElementById('close-sidebar');
 
 
+// ================================
+// МОБИЛЬНАЯ ВЕРСИЯ
+// При первом открытии на телефоне
+// sidebar сразу закрыт
+// ================================
+
+if (
+    window.matchMedia(
+        '(max-width: 768px)'
+    ).matches
+) {
+
+    sidebar.classList.add(
+        'hidden'
+    );
+
+    openSidebar.classList.add(
+        'visible'
+    );
+}
+
+
 openSidebar.addEventListener(
     'click',
     function() {
@@ -653,8 +675,20 @@ basemapToggle.addEventListener(
 
 
         searchPanel.classList.add(
-    'hidden'
-);
+            'hidden'
+        );
+
+        settingsPanel.classList.add(
+            'hidden'
+        );
+
+        toolsPanel.classList.add(
+            'hidden'
+        );
+
+        historyPanel.classList.add(
+            'hidden'
+        );
 
 
         basemapMenu.classList.toggle(
@@ -1250,14 +1284,28 @@ searchToggle.addEventListener(
         );
 
 
-        // Чтобы меню подложек
-        // не лежало поверх поиска
-        basemapMenu.classList.add(
-            'hidden'
-        );
+        // Закрываем остальные панели,
+// чтобы на мобильном экране
+// не было нескольких окон сразу
+
+basemapMenu.classList.add(
+    'hidden'
+);
+
+settingsPanel.classList.add(
+    'hidden'
+);
+
+toolsPanel.classList.add(
+    'hidden'
+);
+
+historyPanel.classList.add(
+    'hidden'
+);
 
 
-        if (opening) {
+if (opening) {
 
             setTimeout(
                 function() {
@@ -1701,9 +1749,29 @@ historyToggle.addEventListener(
     'click',
     function() {
 
+        // Закрываем остальные панели
+
+        basemapMenu.classList.add(
+            'hidden'
+        );
+
+        searchPanel.classList.add(
+            'hidden'
+        );
+
+        settingsPanel.classList.add(
+            'hidden'
+        );
+
+        toolsPanel.classList.add(
+            'hidden'
+        );
+
+
         historyPanel.classList.toggle(
             'hidden'
         );
+
     }
 );
 
@@ -2427,13 +2495,21 @@ settingsToggle.addEventListener(
         );
 
 
-        // Закрываем поиск и подложки
+        // Закрываем остальные панели
+
         searchPanel.classList.add(
             'hidden'
         );
 
-
         basemapMenu.classList.add(
+            'hidden'
+        );
+
+        toolsPanel.classList.add(
+            'hidden'
+        );
+
+        historyPanel.classList.add(
             'hidden'
         );
 
@@ -3569,18 +3645,21 @@ toolsToggle.addEventListener(
         );
 
 
-        // Закрываем остальные окна
+        // Закрываем остальные панели
+
         basemapMenu.classList.add(
             'hidden'
         );
-
 
         searchPanel.classList.add(
             'hidden'
         );
 
-
         settingsPanel.classList.add(
+            'hidden'
+        );
+
+        historyPanel.classList.add(
             'hidden'
         );
 
