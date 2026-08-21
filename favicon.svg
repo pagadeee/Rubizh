@@ -1,0 +1,30 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 64 64">
+
+    <rect
+        width="64"
+        height="64"
+        rx="12"
+        fill="#171a18"
+    />
+
+    <text
+        x="32"
+        y="44"
+        text-anchor="middle"
+        font-family="Arial Narrow, Arial, sans-serif"
+        font-size="42"
+        font-weight="700"
+        fill="#e7e9e5">
+        R
+    </text>
+
+    <path
+        d="M43 13 L27 51"
+        stroke="#a4a27c"
+        stroke-width="4"
+        stroke-linecap="square"
+    />
+
+</svg>
