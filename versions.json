@@ -14,5 +14,9 @@
     {
         "date": "21.08.2026",
         "file": "history/2026-08-21.geojson"
+    },
+    {
+        "date": "25.08.2026",
+        "file": "history/2026-08-25.geojson"
     }
 ]
