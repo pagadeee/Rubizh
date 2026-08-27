@@ -74,19 +74,18 @@ const topoMap = L.tileLayer(
 );
 
 
-// CARTO Dark Matter
+const CARTO_KEY = 'cb1_2bh6_1_9b4f34020f31686339ee9f14';
+
 const darkMap = L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`,
     {
         subdomains: 'abcd',
-
         maxZoom: 20,
 
         attribution:
             '&copy; OpenStreetMap contributors &copy; CARTO'
     }
 );
-
 
 // По умолчанию гибридная карта
 satelliteMap.addTo(map);
