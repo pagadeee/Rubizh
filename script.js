@@ -49,18 +49,62 @@ const normalMap = L.tileLayer(
 
 // 🛰️ Гибридная спутниковая карта MapTiler
 
-const MAPTILER_KEY = 'hr7Oet5V73fczRoKMyH7';
+const CARTO_KEY = 'cb1_2bh6_1_9b4f34020f31686339ee9f14';
 
-const satelliteMap = L.tileLayer(
-    `https://api.maptiler.com/maps/hybrid-v4/256/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
+const ARCGIS_KEY = 'AAPTaO50FAuCUYZ9JzPZHHKn25A..FW6uHZSEYLxoyKZS_5_Y4RtH4Bz7Q9rK3ZTNC0lzECow7v8w0bVEJ6cOwjLJH5Zl_mPTua5SMESKwmLmzBk3189--gIk-kUwudrCPU34XbXDw9hTImdBZqDKO5XVqYW2b4YZFIlYZmJj3uefyKmDm2hBDPHcxqUj0YqOwNFw7AfdRyu75NmRXQSQHJbe4tV6uW0tSR2kvq4B4ZyyxSgg9YQn1KvBCtt7dYCq4R-_ojfafQs.AT1_5qBar3ji';
+
+// ================================
+// 🛰️ ГИБРИДНАЯ КАРТА
+// Esri Imagery + CARTO labels
+// ================================
+
+// Спутниковые снимки Esri
+const satelliteBase = L.tileLayer(
+    'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {
-        minZoom: 1,
+        maxNativeZoom: 19,
         maxZoom: 20,
+
         attribution:
-            '&copy; MapTiler &copy; OpenStreetMap contributors',
-        crossOrigin: true
+            'Tiles &copy; Esri'
     }
 );
+
+
+// Слой подписей поверх территорий
+map.createPane(
+    'satelliteLabelsPane'
+);
+
+const satelliteLabelsPane =
+    map.getPane(
+        'satelliteLabelsPane'
+    );
+
+satelliteLabelsPane.style.zIndex =
+    '460';
+
+satelliteLabelsPane.style.pointerEvents =
+    'none';
+
+
+const satelliteLabels =
+    L.esri.Vector.vectorBasemapLayer(
+        'arcgis/imagery/labels',
+        {
+            apikey: ARCGIS_KEY,
+            version: 2,
+            language: 'uk',
+            pane: 'satelliteLabelsPane'
+        }
+    );
+
+
+// Объединяем спутник и подписи
+const satelliteMap = L.layerGroup([
+    satelliteBase,
+    satelliteLabels
+]);
 
 
 // Топографическая
@@ -74,7 +118,6 @@ const topoMap = L.tileLayer(
 );
 
 
-const CARTO_KEY = 'cb1_2bh6_1_9b4f34020f31686339ee9f14';
 
 const darkMap = L.tileLayer(
     `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`,
@@ -1163,7 +1206,6 @@ function performPlaceSearch() {
             .value
             .trim();
 
-
     if (
         query.length < 2
     ) {
@@ -1184,28 +1226,41 @@ function performPlaceSearch() {
 
     clearPlaceSearchResults();
 
-
     setPlaceSearchStatus(
         'Поиск...'
     );
 
 
+    let arcgisLanguage = 'UK';
+
+    if (currentLanguage === 'ru') {
+        arcgisLanguage = 'RU';
+    }
+
+    if (currentLanguage === 'en') {
+        arcgisLanguage = 'EN';
+    }
+
+
     const searchUrl =
-        'https://api.maptiler.com/geocoding/' +
+        'https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates' +
+        '?f=json' +
+        '&singleLine=' +
         encodeURIComponent(query) +
-        '.json' +
-        '?key=' +
+        '&sourceCountry=UKR' +
+        '&langCode=' +
         encodeURIComponent(
-            MAPTILER_KEY
+            arcgisLanguage
         ) +
-        '&country=ua' +
-        '&language=' +
-encodeURIComponent(
-    currentLanguage
-) +
-        '&types=municipality,locality,place' +
-        '&limit=5' +
-        '&autocomplete=false';
+        '&category=Populated Place' +
+        '&maxLocations=5' +
+        '&outSR=4326' +
+        '&outFields=*' +
+        '&forStorage=false' +
+        '&token=' +
+        encodeURIComponent(
+            ARCGIS_KEY
+        );
 
 
     fetch(searchUrl)
@@ -1220,26 +1275,76 @@ encodeURIComponent(
                 );
             }
 
-
             return response.json();
         })
 
 
         .then(data => {
 
-            // Если уже был новый запрос —
-            // игнорируем старый
             if (
                 requestId !==
                 placeSearchRequestId
             ) {
-
                 return;
             }
 
 
+            if (data.error) {
+
+                throw new Error(
+                    data.error.message ||
+                    'Ошибка ArcGIS'
+                );
+            }
+
+
+            const features =
+                (data.candidates || [])
+                    .map(candidate => {
+
+                        const location =
+                            candidate.location;
+
+                        if (
+                            !location ||
+                            typeof location.x !==
+                                'number' ||
+                            typeof location.y !==
+                                'number'
+                        ) {
+                            return null;
+                        }
+
+
+                        const fullName =
+                            candidate.address ||
+                            'Найденное место';
+
+
+                        const shortName =
+                            fullName
+                                .split(',')[0]
+                                .trim();
+
+
+                        return {
+                            center: [
+                                location.x,
+                                location.y
+                            ],
+
+                            text:
+                                shortName,
+
+                            place_name:
+                                fullName
+                        };
+                    })
+                    .filter(Boolean);
+
+
             showPlaceSearchResults(
-                data.features || []
+                features
             );
 
         })
@@ -1251,7 +1356,6 @@ encodeURIComponent(
                 'Ошибка поиска:',
                 error
             );
-
 
             setPlaceSearchStatus(
                 'Не удалось выполнить поиск'
